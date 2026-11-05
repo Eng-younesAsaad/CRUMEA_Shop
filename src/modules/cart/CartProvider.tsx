@@ -78,18 +78,7 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children, products }
       removeItem,
       clearCart,
     }),
-    [
-      items,
-      cart,
-      isDrawerOpen,
-      openDrawer,
-      closeDrawer,
-      toggleDrawer,
-      addToCart,
-      updateQuantity,
-      removeItem,
-      clearCart,
-    ],
+    [items, cart, isDrawerOpen, openDrawer, closeDrawer, toggleDrawer, addToCart, updateQuantity, removeItem, clearCart],
   );
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
