@@ -1,6 +1,6 @@
 import React from "react";
 
-export const StorySection: React.FC = () => {
+export function StorySection(): React.JSX.Element {
   return (
     <section id="story" className="story-section" aria-labelledby="story-title">
       <div className="container story-grid">
@@ -33,4 +33,4 @@ export const StorySection: React.FC = () => {
       </div>
     </section>
   );
-};
+}

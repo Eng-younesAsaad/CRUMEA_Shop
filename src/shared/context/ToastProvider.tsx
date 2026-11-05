@@ -6,7 +6,7 @@ export interface ToastProviderProps {
   children: React.ReactNode;
 }
 
-export const ToastProvider: React.FC<ToastProviderProps> = ({ children }) => {
+export function ToastProvider({ children }: ToastProviderProps): React.JSX.Element {
   const [toasts, setToasts] = useState<ToastItem[]>([]);
 
   const removeToast = useCallback((id: string) => {
@@ -23,4 +23,4 @@ export const ToastProvider: React.FC<ToastProviderProps> = ({ children }) => {
       {children}
     </ToastContext.Provider>
   );
-};
+}

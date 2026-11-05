@@ -5,14 +5,14 @@ export interface HeaderProps {
   onCategorySelect: (category: string) => void;
 }
 
-export const Header: React.FC<HeaderProps> = ({ onCategorySelect }) => {
-  const handleNavCategoryClick = (category: string) => {
+export function Header({ onCategorySelect }: HeaderProps): React.JSX.Element {
+  function handleNavCategoryClick(category: string): void {
     onCategorySelect(category);
     const shopEl = document.getElementById("shop");
     if (shopEl) {
       shopEl.scrollIntoView({ behavior: "smooth" });
     }
-  };
+  }
 
   return (
     <header className="site-header">
@@ -81,4 +81,4 @@ export const Header: React.FC<HeaderProps> = ({ onCategorySelect }) => {
       </div>
     </header>
   );
-};
+}

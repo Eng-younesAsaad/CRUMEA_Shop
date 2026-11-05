@@ -4,14 +4,14 @@ export interface GiftingSectionProps {
   onSelectGiftBoxes: () => void;
 }
 
-export const GiftingSection: React.FC<GiftingSectionProps> = ({ onSelectGiftBoxes }) => {
-  const handleClick = () => {
+export function GiftingSection({ onSelectGiftBoxes }: GiftingSectionProps): React.JSX.Element {
+  function handleClick(): void {
     onSelectGiftBoxes();
     const shopEl = document.getElementById("shop");
     if (shopEl) {
       shopEl.scrollIntoView({ behavior: "smooth" });
     }
-  };
+  }
 
   return (
     <section className="gifting-section" aria-labelledby="gifting-title">
@@ -47,4 +47,4 @@ export const GiftingSection: React.FC<GiftingSectionProps> = ({ onSelectGiftBoxe
       </div>
     </section>
   );
-};
+}

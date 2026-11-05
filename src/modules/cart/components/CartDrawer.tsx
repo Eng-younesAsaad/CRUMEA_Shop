@@ -7,16 +7,29 @@ export interface CartDrawerProps {
   products: Product[];
 }
 
-export const CartDrawer: React.FC<CartDrawerProps> = ({ products }) => {
+function getOverlayClassName(isDrawerOpen: boolean): string {
+  if (isDrawerOpen) {
+    return "cart-overlay is-visible";
+  }
+  return "cart-overlay";
+}
+
+function getDrawerClassName(isDrawerOpen: boolean): string {
+  if (isDrawerOpen) {
+    return "cart-drawer is-open";
+  }
+  return "cart-drawer";
+}
+
+export function CartDrawer({ products }: CartDrawerProps): React.JSX.Element {
   const { cart, isDrawerOpen, closeDrawer, clearCart } = useCart();
 
-  // Handle Escape key to close drawer
   useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
+    function handleKeyDown(event: KeyboardEvent): void {
       if (event.key === "Escape" && isDrawerOpen) {
         closeDrawer();
       }
-    };
+    }
 
     window.addEventListener("keydown", handleKeyDown);
     return () => {
@@ -24,7 +37,6 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ products }) => {
     };
   }, [isDrawerOpen, closeDrawer]);
 
-  // Handle body scroll lock
   useEffect(() => {
     if (isDrawerOpen) {
       document.body.style.overflow = "hidden";
@@ -37,8 +49,34 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ products }) => {
     };
   }, [isDrawerOpen]);
 
-  const overlayClassName = `cart-overlay ${isDrawerOpen ? "is-visible" : ""}`.trim();
-  const drawerClassName = `cart-drawer ${isDrawerOpen ? "is-open" : ""}`.trim();
+  function handleCheckout(): void {
+    alert("Thank you for your order! CRUMÉA artisan treats are being prepared with love.");
+  }
+
+  function renderCartItems(): React.JSX.Element | React.JSX.Element[] {
+    if (cart.items.length === 0) {
+      return (
+        <div className="cart-empty-state">
+          <p className="cart-empty-title">Your cart is currently empty</p>
+          <p className="cart-empty-text">
+            Fill it with our handcrafted cookies, pastries, and treats!
+          </p>
+        </div>
+      );
+    }
+
+    const rows: React.JSX.Element[] = [];
+    for (const item of cart.items) {
+      const product = products.find((p) => p.id === item.id);
+      if (product) {
+        rows.push(<CartItemRow key={item.id} item={item} product={product} />);
+      }
+    }
+    return rows;
+  }
+
+  const overlayClassName = getOverlayClassName(isDrawerOpen);
+  const drawerClassName = getDrawerClassName(isDrawerOpen);
 
   return (
     <>
@@ -71,20 +109,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ products }) => {
         </div>
 
         <div id="cart-items" className="cart-items-list" aria-live="polite">
-          {cart.items.length === 0 ? (
-            <div className="cart-empty-state">
-              <p className="cart-empty-title">Your cart is currently empty</p>
-              <p className="cart-empty-text">
-                Fill it with our handcrafted cookies, pastries, and treats!
-              </p>
-            </div>
-          ) : (
-            cart.items.map((item) => {
-              const product = products.find((p) => p.id === item.id);
-              if (!product) return null;
-              return <CartItemRow key={item.id} item={item} product={product} />;
-            })
-          )}
+          {renderCartItems()}
         </div>
 
         <div className="cart-drawer-footer">
@@ -96,11 +121,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ products }) => {
             type="button"
             className="btn-primary"
             aria-label="Proceed to Checkout"
-            onClick={() => {
-              alert(
-                "Thank you for your order! CRUMÉA artisan treats are being prepared with love.",
-              );
-            }}
+            onClick={handleCheckout}
           >
             Checkout Now
           </button>
@@ -117,4 +138,4 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ products }) => {
       </aside>
     </>
   );
-};
+}

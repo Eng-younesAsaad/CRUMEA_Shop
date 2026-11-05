@@ -13,7 +13,7 @@ export interface ProductFiltersProps {
   onSimulateError: () => void;
 }
 
-export const ProductFilters: React.FC<ProductFiltersProps> = ({
+export function ProductFilters({
   searchQuery,
   onSearchChange,
   selectedCategory,
@@ -22,7 +22,22 @@ export const ProductFilters: React.FC<ProductFiltersProps> = ({
   selectedSort,
   onSortChange,
   onSimulateError,
-}) => {
+}: ProductFiltersProps): React.JSX.Element {
+  function handleSearchInput(e: React.ChangeEvent<HTMLInputElement>): void {
+    onSearchChange(e.target.value);
+  }
+
+  function handleCategorySelect(e: React.ChangeEvent<HTMLSelectElement>): void {
+    onCategoryChange(e.target.value);
+  }
+
+  function handleSortSelect(e: React.ChangeEvent<HTMLSelectElement>): void {
+    const val = e.target.value;
+    if (isSortOption(val)) {
+      onSortChange(val);
+    }
+  }
+
   return (
     <div className="filter-bar" role="search" aria-label="Filter and sort products">
       <div className="filter-group">
@@ -35,7 +50,7 @@ export const ProductFilters: React.FC<ProductFiltersProps> = ({
           className="filter-input"
           placeholder='Try "chocolate", "croissant"...'
           value={searchQuery}
-          onChange={(e) => onSearchChange(e.target.value)}
+          onChange={handleSearchInput}
         />
       </div>
 
@@ -47,7 +62,7 @@ export const ProductFilters: React.FC<ProductFiltersProps> = ({
           id="category-select"
           className="filter-select"
           value={selectedCategory}
-          onChange={(e) => onCategoryChange(e.target.value)}
+          onChange={handleCategorySelect}
         >
           <option value="all">All Categories</option>
           {categories.map((category) => (
@@ -66,12 +81,7 @@ export const ProductFilters: React.FC<ProductFiltersProps> = ({
           id="sort-select"
           className="filter-select"
           value={selectedSort}
-          onChange={(e) => {
-            const val = e.target.value;
-            if (isSortOption(val)) {
-              onSortChange(val);
-            }
-          }}
+          onChange={handleSortSelect}
         >
           <option value="default">Default Order</option>
           <option value="price-asc">Price: Low to High</option>
@@ -95,4 +105,4 @@ export const ProductFilters: React.FC<ProductFiltersProps> = ({
       </div>
     </div>
   );
-};
+}

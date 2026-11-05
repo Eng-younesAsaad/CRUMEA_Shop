@@ -1,6 +1,6 @@
 import React from "react";
 
-export const HeroSection: React.FC = () => {
+export function HeroSection(): React.JSX.Element {
   return (
     <section className="hero-section" aria-labelledby="hero-title">
       <div className="container hero-grid">
@@ -35,4 +35,4 @@ export const HeroSection: React.FC = () => {
       </div>
     </section>
   );
-};
+}

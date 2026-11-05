@@ -10,22 +10,19 @@ export interface ProductGridProps {
   onResetFilters: () => void;
 }
 
-export const ProductGrid: React.FC<ProductGridProps> = ({
+const SKELETON_KEYS = ["sk-1", "sk-2", "sk-3", "sk-4", "sk-5", "sk-6"];
+
+export function ProductGrid({
   catalogState,
   visibleProducts,
   onRetry,
   onResetFilters,
-}) => {
-  // State 1: Loading
+}: ProductGridProps): React.JSX.Element {
   if (catalogState.status === "loading") {
     return (
       <div id="product-grid" className="product-grid" aria-live="polite">
-        {Array.from({ length: 6 }).map((_, index) => (
-          <article
-            key={`skeleton-${index}`}
-            className="product-card product-skeleton-card"
-            aria-hidden="true"
-          >
+        {SKELETON_KEYS.map((key) => (
+          <article key={key} className="product-card product-skeleton-card" aria-hidden="true">
             <div className="skeleton-img-wrap">
               <div className="skeleton-box skeleton-img" />
             </div>
@@ -45,7 +42,6 @@ export const ProductGrid: React.FC<ProductGridProps> = ({
     );
   }
 
-  // State 2: Error
   if (catalogState.status === "error") {
     return (
       <div id="product-grid" className="product-grid" aria-live="polite">
@@ -68,7 +64,6 @@ export const ProductGrid: React.FC<ProductGridProps> = ({
     );
   }
 
-  // State 3: Empty (Total catalog returned 0 products from API)
   if (catalogState.data.length === 0) {
     return (
       <div id="product-grid" className="product-grid" aria-live="polite">
@@ -82,7 +77,6 @@ export const ProductGrid: React.FC<ProductGridProps> = ({
     );
   }
 
-  // State 4: No Match (Filters match 0 products)
   if (visibleProducts.length === 0) {
     return (
       <div id="product-grid" className="product-grid" aria-live="polite">
@@ -105,7 +99,6 @@ export const ProductGrid: React.FC<ProductGridProps> = ({
     );
   }
 
-  // Loaded Products
   return (
     <div id="product-grid" className="product-grid" aria-live="polite">
       {visibleProducts.map((product) => (
@@ -113,4 +106,4 @@ export const ProductGrid: React.FC<ProductGridProps> = ({
       ))}
     </div>
   );
-};
+}

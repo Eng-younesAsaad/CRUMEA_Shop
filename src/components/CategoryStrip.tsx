@@ -49,14 +49,14 @@ const DEFAULT_CATEGORIES: CategoryCardItem[] = [
   },
 ];
 
-export const CategoryStrip: React.FC<CategoryStripProps> = ({ onCategorySelect }) => {
-  const handleCardClick = (category: string) => {
+export function CategoryStrip({ onCategorySelect }: CategoryStripProps): React.JSX.Element {
+  function handleCardClick(category: string): void {
     onCategorySelect(category);
     const shopEl = document.getElementById("shop");
     if (shopEl) {
       shopEl.scrollIntoView({ behavior: "smooth" });
     }
-  };
+  }
 
   return (
     <section className="category-strip-section" aria-label="Browse Bakery Categories">
@@ -88,4 +88,4 @@ export const CategoryStrip: React.FC<CategoryStripProps> = ({ onCategorySelect }
       </div>
     </section>
   );
-};
+}

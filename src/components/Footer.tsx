@@ -4,14 +4,14 @@ export interface FooterProps {
   onCategorySelect: (category: string) => void;
 }
 
-export const Footer: React.FC<FooterProps> = ({ onCategorySelect }) => {
-  const handleCategoryClick = (category: string) => {
+export function Footer({ onCategorySelect }: FooterProps): React.JSX.Element {
+  function handleCategoryClick(category: string): void {
     onCategorySelect(category);
     const shopEl = document.getElementById("shop");
     if (shopEl) {
       shopEl.scrollIntoView({ behavior: "smooth" });
     }
-  };
+  }
 
   return (
     <footer className="site-footer">
@@ -112,4 +112,4 @@ export const Footer: React.FC<FooterProps> = ({ onCategorySelect }) => {
       </div>
     </footer>
   );
-};
+}

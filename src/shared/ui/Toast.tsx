@@ -6,7 +6,36 @@ export interface ToastProps {
   onDismiss: (id: string) => void;
 }
 
-export const Toast: React.FC<ToastProps> = ({ toast, onDismiss }) => {
+function getToastIcon(type: string): string {
+  switch (type) {
+    case "success":
+      return "✓";
+    case "error":
+      return "✕";
+    default:
+      return "ℹ";
+  }
+}
+
+function getToastRole(type: string): "alert" | "status" {
+  if (type === "error") {
+    return "alert";
+  }
+  return "status";
+}
+
+function getToastClassNames(type: string, isVisible: boolean, isLeaving: boolean): string {
+  const classes = ["toast", `toast--${type}`];
+  if (isVisible) {
+    classes.push("is-visible");
+  }
+  if (isLeaving) {
+    classes.push("is-leaving");
+  }
+  return classes.join(" ");
+}
+
+export function Toast({ toast, onDismiss }: ToastProps): React.JSX.Element {
   const [isVisible, setIsVisible] = useState(false);
   const [isLeaving, setIsLeaving] = useState(false);
 
@@ -18,12 +47,10 @@ export const Toast: React.FC<ToastProps> = ({ toast, onDismiss }) => {
   }, [onDismiss, toast.id]);
 
   useEffect(() => {
-    // Animate in
     const enterFrame = requestAnimationFrame(() => {
       setIsVisible(true);
     });
 
-    // Auto dismiss after 3.5 seconds
     const dismissTimer = setTimeout(() => {
       triggerDismiss();
     }, 3500);
@@ -34,19 +61,12 @@ export const Toast: React.FC<ToastProps> = ({ toast, onDismiss }) => {
     };
   }, [triggerDismiss]);
 
-  const iconGlyph = toast.type === "success" ? "✓" : toast.type === "error" ? "✕" : "ℹ";
-
-  const classNames = [
-    "toast",
-    `toast--${toast.type}`,
-    isVisible ? "is-visible" : "",
-    isLeaving ? "is-leaving" : "",
-  ]
-    .filter(Boolean)
-    .join(" ");
+  const iconGlyph = getToastIcon(toast.type);
+  const role = getToastRole(toast.type);
+  const classNames = getToastClassNames(toast.type, isVisible, isLeaving);
 
   return (
-    <div className={classNames} role={toast.type === "error" ? "alert" : "status"}>
+    <div className={classNames} role={role}>
       <span className="toast__icon" aria-hidden="true">
         {iconGlyph}
       </span>
@@ -61,4 +81,4 @@ export const Toast: React.FC<ToastProps> = ({ toast, onDismiss }) => {
       </button>
     </div>
   );
-};
+}

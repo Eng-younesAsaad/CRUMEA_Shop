@@ -8,9 +8,22 @@ export interface CartItemRowProps {
   product: Product;
 }
 
-export const CartItemRow: React.FC<CartItemRowProps> = ({ item, product }) => {
+export function CartItemRow({ item, product }: CartItemRowProps): React.JSX.Element {
   const { updateQuantity, removeItem } = useCart();
-  const itemSubtotal = (product.price * item.qty).toFixed(2);
+  const subtotalNumber = product.price * item.qty;
+  const itemSubtotal = subtotalNumber.toFixed(2);
+
+  function handleDecrease(): void {
+    updateQuantity(item.id, -1, product.name);
+  }
+
+  function handleIncrease(): void {
+    updateQuantity(item.id, 1, product.name);
+  }
+
+  function handleRemove(): void {
+    removeItem(item.id, product.name);
+  }
 
   return (
     <article className="cart-row" data-id={item.id}>
@@ -31,7 +44,7 @@ export const CartItemRow: React.FC<CartItemRowProps> = ({ item, product }) => {
               type="button"
               className="qty-btn"
               aria-label={`Decrease quantity of ${product.name}`}
-              onClick={() => updateQuantity(item.id, -1, product.name)}
+              onClick={handleDecrease}
             >
               −
             </button>
@@ -42,7 +55,7 @@ export const CartItemRow: React.FC<CartItemRowProps> = ({ item, product }) => {
               type="button"
               className="qty-btn"
               aria-label={`Increase quantity of ${product.name}`}
-              onClick={() => updateQuantity(item.id, 1, product.name)}
+              onClick={handleIncrease}
             >
               +
             </button>
@@ -54,10 +67,10 @@ export const CartItemRow: React.FC<CartItemRowProps> = ({ item, product }) => {
         type="button"
         className="cart-row-remove"
         aria-label={`Remove ${product.name} from cart`}
-        onClick={() => removeItem(item.id, product.name)}
+        onClick={handleRemove}
       >
         Remove
       </button>
     </article>
   );
-};
+}

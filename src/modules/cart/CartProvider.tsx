@@ -17,7 +17,7 @@ export interface CartProviderProps {
   products: Product[];
 }
 
-export const CartProvider: React.FC<CartProviderProps> = ({ children, products }) => {
+export function CartProvider({ children, products }: CartProviderProps): React.JSX.Element {
   const [items, setItems] = useState<CartItem[]>(getCart);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const { showToast } = useToast();
@@ -78,8 +78,19 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children, products }
       removeItem,
       clearCart,
     }),
-    [items, cart, isDrawerOpen, openDrawer, closeDrawer, toggleDrawer, addToCart, updateQuantity, removeItem, clearCart],
+    [
+      items,
+      cart,
+      isDrawerOpen,
+      openDrawer,
+      closeDrawer,
+      toggleDrawer,
+      addToCart,
+      updateQuantity,
+      removeItem,
+      clearCart,
+    ],
   );
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
-};
+}

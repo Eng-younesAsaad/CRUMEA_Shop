@@ -16,7 +16,7 @@ import { ReviewsSection } from "./components/ReviewsSection";
 import { NewsletterSection } from "./components/NewsletterSection";
 import { Footer } from "./components/Footer";
 
-const ShopApp: React.FC = () => {
+function ShopApp(): React.JSX.Element {
   const {
     catalogState,
     allProducts,
@@ -30,6 +30,10 @@ const ShopApp: React.FC = () => {
     retry,
     simulateError,
   } = useProducts();
+
+  function handleSelectGiftBoxes(): void {
+    setCategory("Gift Boxes");
+  }
 
   return (
     <CartProvider products={allProducts}>
@@ -71,7 +75,7 @@ const ShopApp: React.FC = () => {
           </div>
         </section>
 
-        <GiftingSection onSelectGiftBoxes={() => setCategory("Gift Boxes")} />
+        <GiftingSection onSelectGiftBoxes={handleSelectGiftBoxes} />
         <IngredientsSection />
         <ReviewsSection />
         <NewsletterSection />
@@ -82,9 +86,9 @@ const ShopApp: React.FC = () => {
       <ToastContainer />
     </CartProvider>
   );
-};
+}
 
-export default function App() {
+export default function App(): React.JSX.Element {
   return (
     <ToastProvider>
       <ShopApp />

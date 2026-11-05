@@ -1,16 +1,17 @@
 import React, { useState } from "react";
 import { useToast } from "../shared/context/ToastContext";
 
-export const NewsletterSection: React.FC = () => {
+export function NewsletterSection(): React.JSX.Element {
   const [email, setEmail] = useState("");
   const { showToast } = useToast();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  function handleSubmit(e: React.FormEvent): void {
     e.preventDefault();
-    if (!email.trim()) return;
-    showToast(`Thank you for subscribing, ${email}!`, "success");
+    const cleanEmail = email.trim();
+    if (cleanEmail.length === 0) return;
+    showToast(`Thank you for subscribing, ${cleanEmail}!`, "success");
     setEmail("");
-  };
+  }
 
   return (
     <section className="newsletter-section" aria-labelledby="newsletter-title">
@@ -45,4 +46,4 @@ export const NewsletterSection: React.FC = () => {
       </div>
     </section>
   );
-};
+}

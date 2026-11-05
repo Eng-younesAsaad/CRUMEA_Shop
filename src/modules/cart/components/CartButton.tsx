@@ -5,7 +5,7 @@ export interface CartButtonProps {
   className?: string;
 }
 
-export const CartButton: React.FC<CartButtonProps> = ({ className = "header-btn" }) => {
+export function CartButton({ className = "header-btn" }: CartButtonProps): React.JSX.Element {
   const { cart, toggleDrawer } = useCart();
 
   return (
@@ -24,4 +24,4 @@ export const CartButton: React.FC<CartButtonProps> = ({ className = "header-btn"
       </span>
     </button>
   );
-};
+}

@@ -6,7 +6,29 @@ import { getProducts } from "./products.api";
 import { filterAndSortProducts, extractUniqueCategories } from "./products.logic";
 import { useToast } from "../../shared/context/ToastContext";
 
-export function useProducts() {
+function getErrorMessage(error: unknown): string {
+  if (error instanceof Error) {
+    return error.message;
+  }
+  return "Failed to load product catalog";
+}
+
+export interface UseProductsResult {
+  catalogState: AsyncState<Product[]>;
+  allProducts: Product[];
+  visibleProducts: Product[];
+  categories: string[];
+  filters: ProductFilterState;
+  setQuery: (query: string) => void;
+  setCategory: (category: Category | "all") => void;
+  setSortBy: (sortBy: SortOption) => void;
+  resetFilters: () => void;
+  loadCatalog: (forceFail?: boolean) => void;
+  retry: () => void;
+  simulateError: () => void;
+}
+
+export function useProducts(): UseProductsResult {
   const [catalogState, setCatalogState] = useState<AsyncState<Product[]>>(createLoadingState);
   const [filters, setFilters] = useState<ProductFilterState>({
     query: "",
@@ -24,8 +46,7 @@ export function useProducts() {
         const products = await getProducts(forceFail);
         setCatalogState(createSuccessState(products));
       } catch (error: unknown) {
-        const errorMessage =
-          error instanceof Error ? error.message : "Failed to load product catalog";
+        const errorMessage = getErrorMessage(error);
         setCatalogState(createErrorState(errorMessage));
         showToast(errorMessage, "error");
       }
@@ -43,8 +64,7 @@ export function useProducts() {
       })
       .catch((error: unknown) => {
         if (isSubscribed) {
-          const errorMessage =
-            error instanceof Error ? error.message : "Failed to load product catalog";
+          const errorMessage = getErrorMessage(error);
           setCatalogState(createErrorState(errorMessage));
           showToast(errorMessage, "error");
         }
@@ -75,18 +95,38 @@ export function useProducts() {
     });
   }, []);
 
-  const allProducts = useMemo(() => {
-    return catalogState.status === "success" ? catalogState.data : [];
+  const allProducts = useMemo((): Product[] => {
+    if (catalogState.status === "success") {
+      return catalogState.data;
+    }
+    return [];
   }, [catalogState]);
 
-  const categories = useMemo(() => {
+  const categories = useMemo((): string[] => {
     return extractUniqueCategories(allProducts);
   }, [allProducts]);
 
-  const visibleProducts = useMemo(() => {
-    if (catalogState.status !== "success") return [];
+  const visibleProducts = useMemo((): Product[] => {
+    if (catalogState.status !== "success") {
+      return [];
+    }
     return filterAndSortProducts(catalogState.data, filters);
   }, [catalogState, filters]);
+
+  const loadCatalog = useCallback(
+    (forceFail = false) => {
+      void fetchCatalogData(forceFail, true);
+    },
+    [fetchCatalogData],
+  );
+
+  const retry = useCallback(() => {
+    void fetchCatalogData(false, true);
+  }, [fetchCatalogData]);
+
+  const simulateError = useCallback(() => {
+    void fetchCatalogData(true, true);
+  }, [fetchCatalogData]);
 
   return {
     catalogState,
@@ -98,8 +138,8 @@ export function useProducts() {
     setCategory,
     setSortBy,
     resetFilters,
-    loadCatalog: (forceFail = false) => void fetchCatalogData(forceFail, true),
-    retry: () => void fetchCatalogData(false, true),
-    simulateError: () => void fetchCatalogData(true, true),
+    loadCatalog,
+    retry,
+    simulateError,
   };
 }

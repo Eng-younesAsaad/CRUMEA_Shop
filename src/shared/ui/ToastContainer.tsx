@@ -6,7 +6,7 @@ export interface ToastContainerProps {
   id?: string;
 }
 
-export const ToastContainer: React.FC<ToastContainerProps> = ({ id = "toasts" }) => {
+export function ToastContainer({ id = "toasts" }: ToastContainerProps): React.JSX.Element {
   const { toasts, removeToast } = useToast();
 
   if (toasts.length === 0) {
@@ -20,4 +20,4 @@ export const ToastContainer: React.FC<ToastContainerProps> = ({ id = "toasts" })
       ))}
     </div>
   );
-};
+}

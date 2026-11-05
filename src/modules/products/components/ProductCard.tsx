@@ -6,8 +6,12 @@ export interface ProductCardProps {
   product: Product;
 }
 
-export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
+export function ProductCard({ product }: ProductCardProps): React.JSX.Element {
   const { addToCart } = useCart();
+
+  function handleAddToCart(): void {
+    addToCart(product);
+  }
 
   return (
     <article className="product-card" data-category={product.category}>
@@ -31,7 +35,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             type="button"
             className="btn-add-cart"
             aria-label={`Add ${product.name} to cart`}
-            onClick={() => addToCart(product)}
+            onClick={handleAddToCart}
           >
             Add to Cart
           </button>
@@ -39,4 +43,4 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
       </div>
     </article>
   );
-};
+}

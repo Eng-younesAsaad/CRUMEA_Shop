@@ -1,6 +1,6 @@
 import React from "react";
 
-export const ReviewsSection: React.FC = () => {
+export function ReviewsSection(): React.JSX.Element {
   return (
     <section className="reviews-section" aria-labelledby="reviews-title">
       <div className="container">
@@ -48,4 +48,4 @@ export const ReviewsSection: React.FC = () => {
       </div>
     </section>
   );
-};
+}
