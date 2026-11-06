@@ -1262,9 +1262,10 @@ button {
 /* ─── 12. Accessible Toast Notification Stack (#toasts) ─── */
 .toasts-container {
   position: fixed;
-  bottom: var(--space-4);
+  top: var(--space-4);
   left: var(--space-4);
   right: var(--space-4);
+  bottom: auto;
   z-index: 9999;
   display: flex;
   flex-direction: column;
@@ -1509,11 +1510,12 @@ button {
   }
 
   .toasts-container {
-    left: auto;
-    right: var(--space-6);
+    top: auto;
     bottom: var(--space-6);
+    left: var(--space-6);
+    right: auto;
     width: 380px;
-    max-width: 100%;
+    max-width: 380px;
   }
 }
 

@@ -162,8 +162,9 @@ Every interactive button in React must have an explicit `type="button"` (unless 
 ### 4. Toast Notification System (`<ToastContainer />` & `<Toast />`)
 
 - **Architecture**:
-  - Powered by React Context (`ToastContext.tsx`) and `useToast()` hook.
-  - Positioned bottom-right on desktop, bottom-center on mobile.
+  - Powered by React Context (`ToastContext.ts` / `ToastProvider.tsx`) and `useToast()` hook.
+  - Positioned bottom-left on desktop (`bottom: var(--space-6); left: var(--space-6); max-width: 380px;`) completely clear of the right-hand slide-over Cart Drawer, and top-center on mobile (`top: var(--space-4); left: var(--space-4); right: var(--space-4);`) clear of bottom sticky actions.
+  - Container uses `pointer-events: none` and toast cards use `pointer-events: auto` to prevent intercepting clicks.
 - **Accessible Live Region**:
   - The container declares `<div className="toasts-container" aria-live="polite" aria-atomic="true">`.
   - Each `<Toast />` declares `role={type === 'error' ? 'alert' : 'status'}`.
