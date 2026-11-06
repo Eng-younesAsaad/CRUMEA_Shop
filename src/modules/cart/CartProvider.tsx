@@ -57,11 +57,16 @@ export function CartProvider({ children, products }: CartProviderProps): React.J
     [showToast],
   );
 
-  const clearCart = useCallback(() => {
-    const updated = stateClearCart();
-    setItems(updated);
-    showToast("Your cart has been cleared", "info");
-  }, [showToast]);
+  const clearCart = useCallback(
+    (silent = false) => {
+      const updated = stateClearCart();
+      setItems(updated);
+      if (!silent) {
+        showToast("Your cart has been cleared", "info");
+      }
+    },
+    [showToast],
+  );
 
   const cart = useMemo(() => buildCart(items, products), [items, products]);
 

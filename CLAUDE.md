@@ -147,3 +147,5 @@ _Written in first-person engineering voice to prevent regressions:_
    - Desktop-down CSS overrides create fragile specificity wars and horizontal overflow on mobile screens. I write base CSS for 360px mobile viewports and scale upwards exclusively via `@media (min-width: 768px)` and `@media (min-width: 1280px)`. Every interactive control is a semantic `<button type="button">` or `<a>`. Never `<div onClick={...}>`.
 9. **"I will never define base URLs inside feature modules"**:
    - Feature API modules like `products.api.ts` must only define feature domain endpoints and data normalization. The HTTP base URL (`API_BASE_URL`), URL resolution, and generic fetch configuration belong exclusively inside `src/shared/api/client.ts`.
+10. **"I will never use blocking browser `window.alert()` or `window.confirm()`"**:
+    - Never use blocking browser `window.alert()` or `window.confirm()`; always use `useToast()` and guard/disable checkout actions when the cart is empty (`items.length === 0`). Blocking native browser dialogs halt execution, cannot be styled or tested, and degrade user experience.

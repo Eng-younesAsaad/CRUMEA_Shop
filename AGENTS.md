@@ -193,3 +193,5 @@ _Written in first-person engineering voice to prevent regressions:_
    - Every file has a single, strictly delineated purpose that must be immediately understandable in 5 seconds. If a utility or config is shared across features, it lives in `src/shared/`. If it is pure business logic, it lives in `*.logic.ts` (100% pure, no React). If it is a hook, it lives in `use*.ts`. If it is UI presentation, it lives in `components/*.tsx`.
 9. **"I will never forget cleanup functions in useEffect"**:
    - Failing to clear `setTimeout`, cancel fetch subscriptions, or remove global window listeners in `useEffect` cleanup causes memory leaks and updates on unmounted components. I always return a cleanup function when creating timers or subscriptions.
+10. **"I will never use blocking browser `window.alert()` or `window.confirm()`"**:
+    - Never use blocking browser `window.alert()` or `window.confirm()`; always use `useToast()` and guard/disable checkout actions when the cart is empty (`items.length === 0`). Blocking native browser dialogs halt execution, cannot be styled or tested, and degrade user experience.

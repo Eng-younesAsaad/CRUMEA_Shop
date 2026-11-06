@@ -12,7 +12,7 @@ export interface CartContextValue {
   addToCart: (product: Product) => void;
   updateQuantity: (productId: number, delta: number, productName?: string) => void;
   removeItem: (productId: number, productName?: string) => void;
-  clearCart: () => void;
+  clearCart: (silent?: boolean) => void;
 }
 
 export const CartContext = createContext<CartContextValue | undefined>(undefined);

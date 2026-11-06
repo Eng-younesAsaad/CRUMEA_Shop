@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { useCart } from "../cart.context";
+import { useToast } from "../../../shared/context/ToastContext";
 import { CartItemRow } from "./CartItemRow";
 import type { Product } from "../../products/products.types";
 
@@ -23,6 +24,9 @@ function getDrawerClassName(isDrawerOpen: boolean): string {
 
 export function CartDrawer({ products }: CartDrawerProps): React.JSX.Element {
   const { cart, isDrawerOpen, closeDrawer, clearCart } = useCart();
+  const { showToast } = useToast();
+
+  const isCartEmpty = cart.items.length === 0;
 
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent): void {
@@ -50,7 +54,20 @@ export function CartDrawer({ products }: CartDrawerProps): React.JSX.Element {
   }, [isDrawerOpen]);
 
   function handleCheckout(): void {
-    alert("Thank you for your order! CRUMÉA artisan treats are being prepared with love.");
+    if (isCartEmpty) {
+      showToast("Your cart is empty. Please add items before checking out.", "error");
+      return;
+    }
+    showToast("Thank you for your order! Your CRUMÉA treats are being prepared.", "success");
+    clearCart(true);
+    closeDrawer();
+  }
+
+  function handleClearCart(): void {
+    if (isCartEmpty) {
+      return;
+    }
+    clearCart();
   }
 
   function renderCartItems(): React.JSX.Element | React.JSX.Element[] {
@@ -121,6 +138,8 @@ export function CartDrawer({ products }: CartDrawerProps): React.JSX.Element {
             type="button"
             className="btn-primary"
             aria-label="Proceed to Checkout"
+            disabled={isCartEmpty}
+            aria-disabled={isCartEmpty}
             onClick={handleCheckout}
           >
             Checkout Now
@@ -130,7 +149,9 @@ export function CartDrawer({ products }: CartDrawerProps): React.JSX.Element {
             id="clear-cart-btn"
             className="btn-clear-cart"
             aria-label="Clear all items from cart"
-            onClick={clearCart}
+            disabled={isCartEmpty}
+            aria-disabled={isCartEmpty}
+            onClick={handleClearCart}
           >
             Clear Entire Cart
           </button>

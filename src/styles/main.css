@@ -110,6 +110,18 @@ button {
   border-color: var(--clr-gold-light);
 }
 
+.btn-primary:disabled,
+.btn-primary[aria-disabled="true"] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-primary:disabled:hover,
+.btn-primary[aria-disabled="true"]:hover {
+  background-color: var(--clr-gold);
+  border-color: var(--clr-gold);
+}
+
 .btn-secondary {
   display: inline-flex;
   align-items: center;
@@ -1177,6 +1189,17 @@ button {
 
 .btn-clear-cart:hover {
   color: var(--clr-danger);
+}
+
+.btn-clear-cart:disabled,
+.btn-clear-cart[aria-disabled="true"] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-clear-cart:disabled:hover,
+.btn-clear-cart[aria-disabled="true"]:hover {
+  color: var(--clr-text-muted);
 }
 
 /* ─── 11. Footer ─── */
